@@ -17,8 +17,8 @@ pub trait ConverterCache {
 
 /// A simple enum listing all possible output formats in this program for drawio images.
 pub enum OutputFormat {
-    PDF,
-    SVG,
+    Pdf,
+    Svg,
 }
 
 /// A non-cache converter implementation that always converts the drawio files.
@@ -36,8 +36,8 @@ impl<'a> NoCacheConverter<'a> {
 impl<'a> ConverterCache for NoCacheConverter<'a> {
     fn convert(&self, input_path: &Path, format: OutputFormat) -> Result<PathBuf> {
         let output_path = match format {
-            OutputFormat::PDF => input_path.with_extension("pdf"),
-            OutputFormat::SVG => input_path.with_extension("svg"),
+            OutputFormat::Pdf => input_path.with_extension("pdf"),
+            OutputFormat::Svg => input_path.with_extension("svg"),
         };
 
         self.converter

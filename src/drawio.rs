@@ -57,8 +57,8 @@ impl DrawioConverter {
         }
 
         let format_string = match format {
-            OutputFormat::PDF => "pdf",
-            OutputFormat::SVG => "svg",
+            OutputFormat::Pdf => "pdf",
+            OutputFormat::Svg => "svg",
         };
 
         let output = Command::new(&self.xvfb_run_path)
@@ -79,7 +79,8 @@ impl DrawioConverter {
             return Err(anyhow!(
                 "output path ({:?}) was not created:\n{}",
                 output_path,
-                String::from_utf8(output.stdout).unwrap_or("--non-utf8 output--".to_string()),
+                String::from_utf8(output.stdout)
+                    .unwrap_or_else(|_| "--non-utf8 output--".to_string()),
             ));
         }
         Ok(())

@@ -82,8 +82,8 @@ fn convert_image(converter: &dyn ConverterCache, image: &mut Image, format: &str
     let input_path = Path::new(&path_string);
 
     let output_format = match format {
-        "pdf" => OutputFormat::PDF,
-        "html" | "html5" | "html4" => OutputFormat::SVG,
+        "pdf" => OutputFormat::Pdf,
+        "html" | "html5" | "html4" => OutputFormat::Svg,
         _ => return Err(anyhow!("unknown or unsupported format: {}", format)),
     };
 
@@ -95,10 +95,12 @@ fn convert_image(converter: &dyn ConverterCache, image: &mut Image, format: &str
     let image_url_reference = image.image_url();
     *image_url_reference = output_path
         .to_str()
-        .ok_or(anyhow!(
-            "the output path for a converted file is not valid utf8: {:?}",
-            output_path
-        ))?
+        .ok_or_else(|| {
+            anyhow!(
+                "the output path for a converted file is not valid utf8: {:?}",
+                output_path
+            )
+        })?
         .to_string();
 
     Ok(())
