@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2022 localthomas
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
+[toolchain]
+channel = "stable"
+# rust-src is required for IDE tools like rust-analyzer
+components = [ "rust-src" ]
+targets = [ "x86_64-unknown-linux-musl" ]
+profile = "default"

@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2022 localthomas
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
+[package]
+name = "pandoc-drawio"
+version = "0.1.0"
+authors = ["localthomas"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/localthomas/pandoc-drawio"
+readme = "README.md"
+description = "A pandoc filter that converts draw.io files into common image/vector formats automatically."
+edition = "2021"
+
+[[bin]]
+name = "pandoc-drawio"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0"
+clap = "3.0"
+pandoc_types = "0.5"
+serde_json = "1.0"

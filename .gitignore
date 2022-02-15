@@ -1,0 +1,9 @@
+# ignore build outputs
+/target
+/result
+
+# ignore automatically created license file
+license.html
+
+# ignore VSCode settings
+/.vscode
