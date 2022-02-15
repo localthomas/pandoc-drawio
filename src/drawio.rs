@@ -1,3 +1,8 @@
+/*
+SPDX-FileCopyrightText: 2022 localthomas
+SPDX-License-Identifier: MIT OR Apache-2.0
+*/
+
 use std::{fs, path::Path, process::Command};
 
 use anyhow::{anyhow, Context, Result};

@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2022 localthomas
+SPDX-License-Identifier: MIT OR Apache-2.0
+ -->
+
 # pandoc-drawio
 
 A pandoc filter that converts draw.io files into common image/vector formats automatically.

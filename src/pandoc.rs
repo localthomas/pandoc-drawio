@@ -1,3 +1,8 @@
+/*
+SPDX-FileCopyrightText: 2022 localthomas
+SPDX-License-Identifier: MIT OR Apache-2.0
+*/
+
 use std::io::Read;
 
 use anyhow::{Context, Result};

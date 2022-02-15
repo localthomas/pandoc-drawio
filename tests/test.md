@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2022 localthomas
+SPDX-License-Identifier: MIT OR Apache-2.0
+ -->
+
 # Test Markdown file
 
 This file contains a test image:
