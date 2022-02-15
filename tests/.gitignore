@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2022 localthomas
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
+# ignore the output of the test script
+*.html
+*.json
