@@ -1,0 +1,18 @@
+name: Tests
+
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install nix
+        uses: cachix/install-nix-action@v15
+      - name: execute checks
+        run: nix flake check
+      - name: test build
+        run: nix build
