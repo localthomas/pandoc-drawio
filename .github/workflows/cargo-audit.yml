@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2019 actions-rs team and contributors
+# SPDX-License-Identifier: MIT
+
 name: Security Audit
 
 on:

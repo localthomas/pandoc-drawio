@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2022 localthomas
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
 name: Build and Release
 
 on:
