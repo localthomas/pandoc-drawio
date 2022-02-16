@@ -77,6 +77,10 @@
           # Configures the target which will be built.
           # ref: https://doc.rust-lang.org/cargo/reference/config.html#buildtarget
           CARGO_BUILD_TARGET = "x86_64-unknown-linux-musl";
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS = "-C target-feature=+crt-static";
+
+          # only build if clippy does not generate warnings
+          cargoTestCommands = default: [ ''cargo clippy --locked --offline -- --deny "warnings"'' ] ++ default;
           doCheck = true;
         };
 
