@@ -41,18 +41,34 @@
           cargo = rust;
           rustc = rust;
         };
+
+        # dependencies for building
+        buildingDependencies = with pkgs; [
+          nixpkgs-fmt
+          rust
+          cargo-about
+        ];
       in
       with pkgs;
       {
         devShell = mkShell {
           # tools and dependencies for building and developing
-          nativeBuildInputs = [ nixpkgs-fmt rust cargo-about reuse pandoc drawio xvfb-run ];
+          nativeBuildInputs = buildingDependencies ++ [
+            # dependency for checking REUSE compliance
+            reuse
+            # dependencies for the test.sh script
+            pandoc
+            drawio
+            xvfb-run
+            librsvg
+            texlive.combined.scheme-medium
+          ];
         };
 
         checks = {
           format = runCommand "check-format"
             {
-              nativeBuildInputs = [ self.devShell.${system}.nativeBuildInputs ];
+              nativeBuildInputs = buildingDependencies;
             }
             ''
               cargo-fmt fmt --manifest-path ${./.}/Cargo.toml -- --check
@@ -61,7 +77,7 @@
             '';
           reuse = runCommand "check-reuse"
             {
-              nativeBuildInputs = [ self.devShell.${system}.nativeBuildInputs ];
+              nativeBuildInputs = [ reuse ];
             }
             ''
               reuse --root ${./.} lint
@@ -73,7 +89,7 @@
           pname = crateName;
           root = ./.;
           # The packages of the devShell are re-used for building
-          nativeBuildInputs = [ cargo-about ];
+          nativeBuildInputs = buildingDependencies;
           # Configures the target which will be built.
           # ref: https://doc.rust-lang.org/cargo/reference/config.html#buildtarget
           CARGO_BUILD_TARGET = "x86_64-unknown-linux-musl";
