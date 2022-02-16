@@ -3,7 +3,18 @@
 # SPDX-FileCopyrightText: 2022 localthomas
 # SPDX-License-Identifier: MIT OR Apache-2.0
 
-cargo build && \
-#pandoc -o test.json test.md && \
-#RUST_BACKTRACE=1 ../target/debug/pandoc-drawio test < test.json
-pandoc --filter ../target/debug/pandoc-drawio -o test.html test.md
+set -e
+
+pandoc -o test.json test.md
+
+cd ..
+nix build
+cd tests
+
+../result/bin/pandoc-drawio pdf < test.json
+echo "" # newline after JSON output
+echo "Exit code: $($?)"
+
+# actually use pandoc
+pandoc --filter ../result/bin/pandoc-drawio -o test.html test.md
+#pandoc --filter ../result/bin/pandoc-drawio -o test.pdf test.md
