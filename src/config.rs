@@ -10,7 +10,7 @@ use clap::{App, Arg};
 /// Can be used to alter the behavior of the execution or to configure notification provider.
 #[derive(Debug)]
 pub struct Config {
-    pub xvfb_run_cmd: String,
+    pub xvfb_run_cmd: Option<String>,
     pub drawio_cmd: String,
     pub credits: bool,
     pub format: String,
@@ -23,10 +23,9 @@ impl Config {
             "credits",
             "if set, print the licensing information as HTML and exit",
         );
-        const XVFB_RUN_CMD: (&str, &str, &str) = (
+        const XVFB_RUN_CMD: (&str, &str) = (
             "xvfb-run-cmd",
-            "the path to the xvfb-run executable",
-            "xvfb-run",
+            "the path to the xvfb-run executable, required if no x server is available (e.g. if running headless) (optional)",
         );
         const DRAWIO_CMD: (&str, &str, &str) =
             ("drawio-cmd", "the path to the drawio executable", "drawio");
@@ -48,7 +47,6 @@ impl Config {
                 Arg::new(XVFB_RUN_CMD.0)
                     .long(XVFB_RUN_CMD.0)
                     .help(XVFB_RUN_CMD.1)
-                    .default_value(XVFB_RUN_CMD.2)
                     .takes_value(true),
             )
             .arg(
@@ -63,7 +61,9 @@ impl Config {
 
         Ok(Self {
             credits: matches.is_present(CREDITS.0),
-            xvfb_run_cmd: matches.value_of(XVFB_RUN_CMD.0).unwrap().to_string(),
+            xvfb_run_cmd: matches
+                .value_of(XVFB_RUN_CMD.0)
+                .map(|value| value.to_string()),
             drawio_cmd: matches.value_of(DRAWIO_CMD.0).unwrap().to_string(),
             format: matches.value_of(FORMAT.0).unwrap().to_string(),
         })

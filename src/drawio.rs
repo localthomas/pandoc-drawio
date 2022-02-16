@@ -12,31 +12,34 @@ use crate::cache::OutputFormat;
 /// Holds all settings for converting a drawio file to other output formats.
 pub struct DrawioConverter {
     drawio_path: String,
-    xvfb_run_path: String,
+    xvfb_run_path: Option<String>,
 }
 
 impl DrawioConverter {
     /// Uses the provided command path and tries to access it.
     /// Spawns an `xvfb-run` environment.
-    pub fn new(xvfb_run_path: &str, drawio_path: &str) -> Result<Self> {
-        let mut xvfb_run = Command::new(xvfb_run_path);
-        xvfb_run.output().context(format!(
-            "could not execute '{}' during probing command. Is it installed?",
-            xvfb_run_path
-        ))?;
+    pub fn new(xvfb_run_path: &Option<String>, drawio_path: &str) -> Result<Self> {
+        // test execution with xvfb-run, but only if available
+        if let Some(xvfb_run_path) = xvfb_run_path {
+            let mut xvfb_run = Command::new(xvfb_run_path);
+            xvfb_run.arg("--help");
+            xvfb_run.output().context(format!(
+                "could not execute '{}' during probing command. Is it installed?",
+                xvfb_run_path
+            ))?;
+        }
 
         let mut drawio_command = Command::new(drawio_path);
+        drawio_command.arg("--help");
         // test an execution
         drawio_command.output().context(format!(
             "could not execute '{}' probing command. Is it installed?",
             drawio_path
         ))?;
 
-        let mut command = xvfb_run;
-        command.arg(drawio_path);
         Ok(Self {
             drawio_path: drawio_path.to_string(),
-            xvfb_run_path: xvfb_run_path.to_string(),
+            xvfb_run_path: xvfb_run_path.clone(),
         })
     }
 
@@ -61,8 +64,15 @@ impl DrawioConverter {
             OutputFormat::Svg => "svg",
         };
 
-        let output = Command::new(&self.xvfb_run_path)
-            .arg(&self.drawio_path)
+        let mut start_command = if let Some(xvfb_run_path) = &self.xvfb_run_path {
+            let mut cmd = Command::new(xvfb_run_path);
+            cmd.arg(&self.drawio_path);
+            cmd
+        } else {
+            Command::new(&self.drawio_path)
+        };
+
+        start_command
             .arg("--crop")
             .arg("-x")
             .arg("-o")
@@ -72,9 +82,21 @@ impl DrawioConverter {
             .arg(input_path)
             .arg("--no-sandbox")
             .arg("--disable-gpu")
-            .arg("--disable-dev-shm-usage")
+            .arg("--disable-dev-shm-usage");
+        let output = start_command
             .output()
             .context("could not execute conversion command")?;
+
+        // check for errors during or after execution
+        // error code 133 seems to indicate that no graphic user interface is available and/or xvfb-run did not work
+        match output.status.code() {
+            Some(133) | None => {
+                return Err(anyhow!("running conversion command exited with error: is an x server available (or xvfb-run)?"));
+            }
+            _ => (),
+        }
+
+        // unfortunately, drawio does not exit with an error, if the drawio image was not converted
         if !output_path.exists() {
             return Err(anyhow!(
                 "output path ({:?}) was not created:\n{}",

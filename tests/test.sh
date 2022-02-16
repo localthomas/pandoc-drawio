@@ -13,7 +13,6 @@ cd tests
 
 ../result/bin/pandoc-drawio pdf < test.json
 echo "" # newline after JSON output
-echo "Exit code: $($?)"
 
 # actually use pandoc
 pandoc --filter ../result/bin/pandoc-drawio -o test.html test.md

@@ -17,7 +17,7 @@ Currently two output formats are supported:
 
 ## Requirements
 
-Although this tool is a static binary, it requires the executables `xvfb-run` and `drawio` in the `PATH` and currently only works on Linux.
+Although this tool is a static binary, it requires the executables `xvfb-run` (optional; required if running headless) and `drawio` in the `PATH` and currently only works on Linux.
 The paths to these executables can be set via configuration flags, use `--help` to see a reference of all available flags.
 
 ## Development
