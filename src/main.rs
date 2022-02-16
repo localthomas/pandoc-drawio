@@ -82,7 +82,7 @@ fn convert_image(converter: &dyn ConverterCache, image: &mut Image, format: &str
     let input_path = Path::new(&path_string);
 
     let output_format = match format {
-        "pdf" => OutputFormat::Pdf,
+        "pdf" | "latex" | "context" => OutputFormat::Pdf,
         "html" | "html5" | "html4" => OutputFormat::Svg,
         _ => return Err(anyhow!("unknown or unsupported format: {}", format)),
     };

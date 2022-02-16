@@ -4,3 +4,4 @@
 # ignore the output of the test script
 *.html
 *.json
+*.pdf

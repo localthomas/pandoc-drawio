@@ -16,4 +16,4 @@ echo "" # newline after JSON output
 
 # actually use pandoc
 pandoc --filter ../result/bin/pandoc-drawio -o test.html test.md
-#pandoc --filter ../result/bin/pandoc-drawio -o test.pdf test.md
+pandoc --filter ../result/bin/pandoc-drawio -o test.pdf test.md

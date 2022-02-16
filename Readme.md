@@ -13,7 +13,7 @@ Currently two output formats are supported:
 | Image Output | Pandoc Format |
 | ------------ | ------------- |
 | SVG | html, html4, html5 |
-| PDF | pdf |
+| PDF | pdf, latex, context |
 
 ## Requirements
 
