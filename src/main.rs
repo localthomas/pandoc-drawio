@@ -8,11 +8,7 @@ mod config;
 mod drawio;
 mod pandoc;
 
-use std::{
-    ffi::OsStr,
-    io::{BufRead, Write},
-    path::Path,
-};
+use std::{ffi::OsStr, io::Write, path::Path};
 
 use anyhow::{anyhow, Context, Result};
 use cache::{ConverterCache, NoCacheConverter, OutputFormat};
@@ -40,10 +36,9 @@ fn main() -> Result<()> {
 
     // read the pandoc AST from stdin
     let stdin = std::io::stdin();
-    let mut handle = stdin.lock();
-    let input_data = handle
-        .fill_buf()
-        .context("could not read input data via stdin")?;
+    // Note: do not read all of the stdin data into a buffer, as the stdin input of pandoc can be very large:
+    // e.g. `fill_buf()` would not work due to an internal size limitation of the buffer.
+    let input_data = stdin.lock();
 
     // convert the AST to a Rust representation
     let mut pandoc = PandocDocument::new(input_data).context("could not create pandoc document")?;
