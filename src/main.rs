@@ -12,6 +12,7 @@ use std::{ffi::OsStr, io::Write, path::Path};
 
 use anyhow::{anyhow, Context, Result};
 use cache::{ConverterCache, NoCacheConverter, OutputFormat};
+use rayon::iter::{IntoParallelRefMutIterator, ParallelIterator};
 
 use crate::{
     config::Config,
@@ -44,7 +45,7 @@ fn main() -> Result<()> {
     let mut pandoc = PandocDocument::new(input_data).context("could not create pandoc document")?;
 
     // get all possible images from the document and filter for *.drawio files
-    let drawio_images: Vec<Image> = pandoc
+    let mut drawio_images: Vec<Image> = pandoc
         .get_all_images()
         .into_iter()
         .filter(|image| {
@@ -53,10 +54,13 @@ fn main() -> Result<()> {
         })
         .collect();
 
-    // convert each image to PDF
-    for mut image in drawio_images {
-        convert_image(&converter, &mut image, &config.format).context("could not convert image")?;
-    }
+    // convert each image to its output format
+    drawio_images
+        .par_iter_mut()
+        .try_for_each(|image| -> Result<()> {
+            convert_image(&converter, image, &config.format).context("could not convert image")?;
+            Ok(())
+        })?;
 
     // write the document AST back as JSON to stdout
     std::io::stdout()
