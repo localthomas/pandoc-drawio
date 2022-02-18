@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT OR Apache-2.0
 # pandoc-drawio
 
 A pandoc filter that converts draw.io files into common image/vector formats automatically.
-Inspired by [pandoc-drawio-filter](https://github.com/tfc/pandoc-drawio-filter), but written in Rust and supporting more output formats.
+Inspired by [pandoc-drawio-filter](https://github.com/tfc/pandoc-drawio-filter), but written in Rust, supporting more output formats, and using parallel processing.
 
 Currently two output formats are supported:
 
@@ -19,6 +19,11 @@ Currently two output formats are supported:
 
 Although this tool is a static binary, it requires the executables `xvfb-run` (optional; required if running headless) and `drawio` in the `PATH` and currently only works on Linux.
 The paths to these executables can be set via configuration flags, use `--help` to see a reference of all available flags.
+
+## Usage
+
+Download the static binary from the [releases page](https://github.com/localthomas/pandoc-drawio/releases).
+Use the filter via the `--filter` option in pandoc: e.g. `pandoc --filter /path/to/pandoc-drawio -o test.html test.md`.
 
 ## Development
 
