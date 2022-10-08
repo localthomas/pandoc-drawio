@@ -5,6 +5,11 @@ SPDX-License-Identifier: MIT OR Apache-2.0
 
 # pandoc-drawio
 
+[![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
+
+*This project is considered stable and no significant feature development is currently planned.*
+*However, pull requests and issues are welcome: support/maintenance will be provided as time allows.*
+
 A pandoc filter that converts draw.io files into common image/vector formats automatically.
 Inspired by [pandoc-drawio-filter](https://github.com/tfc/pandoc-drawio-filter), but written in Rust, supporting more output formats, and using parallel processing.
 
